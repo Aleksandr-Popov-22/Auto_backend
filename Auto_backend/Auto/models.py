@@ -1,10 +1,3 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
 
@@ -13,7 +6,7 @@ class Configuration(models.Model):
     doors_count = models.SmallIntegerField(db_column='doors-count', blank=True, null=True)  # Field renamed to remove unsuitable characters.
     body_type = models.CharField(db_column='body-type', max_length=50, blank=True, null=True)  # Field renamed to remove unsuitable characters.
     configuration_name = models.CharField(db_column='configuration-name', max_length=50, blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    generation = models.ForeignKey('Generation', models.DO_NOTHING, blank=True, null=True)
+    generation = models.ForeignKey('Generation', models.DO_NOTHING, blank=True, null=True, related_name='configurations')
 
     class Meta:
         managed = False
@@ -60,11 +53,11 @@ class Model(models.Model):
 
 
 class Modification(models.Model):
-    complectation_id = models.CharField(db_column='complectation-id', unique=True, max_length=50, blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    complectation_id = models.CharField(db_column='complectation-id', unique=True, max_length=50, blank=True, null=False, primary_key=True)  # Field renamed to remove unsuitable characters.
     offers_price_from = models.BigIntegerField(db_column='offers-price-from', blank=True, null=True)  # Field renamed to remove unsuitable characters.
     offers_price_to = models.BigIntegerField(db_column='offers-price-to', blank=True, null=True)  # Field renamed to remove unsuitable characters.
     group_name = models.CharField(db_column='group-name', max_length=100, blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    configuration = models.ForeignKey(Configuration, models.DO_NOTHING, blank=True, null=True)
+    configuration = models.ForeignKey(Configuration, models.DO_NOTHING, blank=True, null=True, related_name='modifications')
 
     class Meta:
         managed = False
@@ -72,7 +65,7 @@ class Modification(models.Model):
 
 
 class Options(models.Model):
-    complectation = models.OneToOneField(Modification, models.DO_NOTHING, blank=True, null=True)
+    complectation = models.ForeignKey(Modification, models.DO_NOTHING, blank=True, null=True, related_name='options')
     alcantara = models.CharField(max_length=100, blank=True, null=True)
     black_roof = models.CharField(db_column='black-roof', max_length=100, blank=True, null=True)  # Field renamed to remove unsuitable characters.
     combo_interior = models.CharField(db_column='combo-interior', max_length=100, blank=True, null=True)  # Field renamed to remove unsuitable characters.
@@ -239,7 +232,7 @@ class Options(models.Model):
 
 
 class Specifications(models.Model):
-    complectation = models.OneToOneField(Modification, models.DO_NOTHING, blank=True, null=True)
+    complectation = models.ForeignKey(Modification, models.DO_NOTHING, blank=True, null=True, related_name='specifications')
     back_brake = models.CharField(db_column='back-brake', max_length=100, blank=True, null=True)  # Field renamed to remove unsuitable characters.
     feeding = models.CharField(max_length=100, blank=True, null=True)
     horse_power = models.CharField(db_column='horse-power', max_length=100, blank=True, null=True)  # Field renamed to remove unsuitable characters.
